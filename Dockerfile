@@ -21,7 +21,8 @@ RUN apk add --no-cache \
     squid=3.5.27-r1  \
     openssl=1.0.2t-r0 \
     ca-certificates && \
-    update-ca-certificates
+    update-ca-certificates\
+    curl
 
 COPY start.sh /usr/local/bin/
 COPY openssl.cnf.add /etc/ssl
