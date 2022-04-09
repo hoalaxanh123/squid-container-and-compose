@@ -25,6 +25,14 @@ initialize_cache() {
 create_cert() {
 	if [ ! -f /etc/squid-cert/private.pem ]; then
 		echo "Creating certificate..."
+		echo "-------Cert info-------"
+		echo "Common Name: $CN"
+		echo "Organization: $O"
+		echo "Organization Unit: $OU"
+		echo "Locality: $L"
+		echo "State: $ST"
+		echo "Country: $C"
+		echo "-----------------------"
 		openssl req -new -newkey rsa:2048 -sha256 -days 3650 -nodes -x509 \
 			-extensions v3_ca -keyout /etc/squid-cert/private.pem \
 			-out /etc/squid-cert/private.pem \
