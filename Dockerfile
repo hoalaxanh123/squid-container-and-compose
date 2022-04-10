@@ -6,10 +6,12 @@ RUN apk upgrade musl
 LABEL maintainer="alatas@gmail.com, edit by Vuong Nguyen"
 
 #set enviromental values for certificate CA generation
-ENV CN=mrv.local \
-    O=mrv \
-    OU=mrv.dev \
-    C=US
+ENV CN="mrv-proxy.local" \
+    O="Mr.V Proxy Container" \
+    OU="Mr.V dev (proxy)" \
+    C=US \
+    L=Toronto \
+    ST=ON
 
 #set proxies for alpine apk package manager
 ARG all_proxy 
@@ -21,8 +23,12 @@ RUN apk add --no-cache \
     squid=3.5.27-r1  \
     openssl=1.0.2t-r0 \
     ca-certificates && \
-    update-ca-certificates\
-    curl
+    update-ca-certificates
+# Extend tools
+RUN apk add --no-cache \
+    curl \
+    wget \
+    nano
 
 COPY start.sh /usr/local/bin/
 COPY openssl.cnf.add /etc/ssl
@@ -32,7 +38,13 @@ RUN cat /etc/ssl/openssl.cnf.add >> /etc/ssl/openssl.cnf
 
 RUN chmod +x /usr/local/bin/start.sh
 
-EXPOSE 3128
+# No SLL
+EXPOSE 3128 
+
+# SSL- BUMP
 EXPOSE 4128
+
+# SSL
+EXPOSE 5128
 
 ENTRYPOINT ["/usr/local/bin/start.sh"]

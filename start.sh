@@ -18,7 +18,6 @@ prepare_folders() {
 initialize_cache() {
 	echo "Creating cache folder..."
 	"$SQUID" -z
-
 	sleep 5
 }
 
@@ -36,7 +35,7 @@ create_cert() {
 		openssl req -new -newkey rsa:2048 -sha256 -days 3650 -nodes -x509 \
 			-extensions v3_ca -keyout /etc/squid-cert/private.pem \
 			-out /etc/squid-cert/private.pem \
-			-subj "/CN=$CN/O=$O/OU=$OU/C=$C" -utf8 -nameopt multiline,utf8
+			-subj "/CN=$CN/O=$O/OU=$OU/C=$C/ST=$ST/L=$L" -utf8 -nameopt multiline,utf8
 
 		openssl x509 -in /etc/squid-cert/private.pem \
 			-outform DER -out /etc/squid-cert/CA.der
