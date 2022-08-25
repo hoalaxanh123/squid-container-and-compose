@@ -19,16 +19,24 @@ ARG all_proxy
 ENV http_proxy=$all_proxy \
     https_proxy=$all_proxy
 
+RUN apk add --no-cache apache2-utils
+
 RUN apk add --no-cache \
     squid=3.5.27-r1  \
     openssl=1.0.2t-r0 \
     ca-certificates && \
     update-ca-certificates
+
 # Extend tools
 RUN apk add --no-cache \
     curl \
     wget \
     nano
+
+RUN htpasswd -b -c /etc/squid/.squid_users admin admin
+RUN chown squid /etc/squid/.squid_users
+
+RUN /usr/lib/squid/basic_ncsa_auth /etc/squid/.squid_users 
 
 COPY start.sh /usr/local/bin/
 COPY openssl.cnf.add /etc/ssl
